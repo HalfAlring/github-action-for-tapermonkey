@@ -1,7 +1,18 @@
 name: extract-tapermonkey-scripts-v2
-# Controls when the workflow will run
+
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: 'input zip/tar file full path'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -20,36 +31,3 @@ name: extract-tapermonkey-scripts-v2
             extract_tampermonkey_script_output
             github-action-run.log
       - run: echo finished
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      path:
-        description: 'input zip/tar file full path'
-        required: true
-        type: string
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - run: pwd
-      - run: tree -a -I .git
-      - run: echo "The input path is:[${{ inputs.path }}]"
-      - run: pip install leveldb
-      - run: python py-2.py "${{ inputs.path }}"
-      - run: tree -a -I .git
-      - uses: actions/upload-artifact@v4
-        with:
-          name: artifact-tampermonkey-extract-output
-          path: |
-            extract_tampermonkey_script_output
-            github-action-run.log
-      - run: echo finished
-
