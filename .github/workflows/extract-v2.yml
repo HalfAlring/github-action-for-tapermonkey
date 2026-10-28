@@ -1,7 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
 name: extract-tapermonkey-scripts-v2
-
 # Controls when the workflow will run
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
