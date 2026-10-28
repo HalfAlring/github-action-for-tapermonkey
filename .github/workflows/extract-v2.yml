@@ -3,7 +3,26 @@
 name: extract-tapermonkey-scripts-v2
 
 # Controls when the workflow will run
-on:
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pwd
+      - run: tree -a -I .git
+      - run: echo "The input path is:[${{ inputs.path }}]"
+      - run: pip install leveldb
+      - run: python py-2.py "${{ inputs.path }}"
+      - run: tree -a -I .git
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-tampermonkey-extract-output
+          path: |
+            extract_tampermonkey_script_output
+            github-action-run.log
+      - run: echo finished
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
